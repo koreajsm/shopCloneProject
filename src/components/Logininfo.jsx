@@ -1,4 +1,5 @@
-import { googleLogOut, googleLogin } from "@/api/api"
+import { googleLogOut, googleLogin, onUserState } from "@/api/api"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
 
@@ -14,9 +15,19 @@ export default function LoginInfo(){
         googleLogOut().then(setUser)
     }
 
+    useEffect(()=>{
+        onUserState((user)=>{
+            setUser(user)
+        })
+    },[])
+    
+
     
     return(
         <>
+            {user && user.isAdmin &&
+            <Link href='/upload' className="uploadBtn">업로드</Link>
+            }
             {user ? (
                 <>
                 <span>{user.displayName}</span>
