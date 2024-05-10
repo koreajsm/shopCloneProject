@@ -1,14 +1,19 @@
 "use client"
 
-import { uploadImgs } from "@/api/api"
+import { addProducts, uploadImgs } from "@/api/api"
 import { CategoryContext } from "@/utils/categoryContext"
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
 
 export default function UploadPage(){
 
     const [file, setFile] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [success, setSuccess] = useState(null)
+    const [error, setError] = useState(null)
+    const fireRef = useRef() // 파일에 있는 값을 비울때에는 돔을 직접적으로 조작해야하기때문에 ref를 사용
+
     const {categoryList} = useContext(CategoryContext)
     /*
     파이어베이스 데이터 베이스 이용시 주의 사항
@@ -69,9 +74,28 @@ export default function UploadPage(){
         e.preventDefault()
         try{
             const url = await uploadImgs(file)
-            console.log(url)
+            await addProducts(product, url)
+            setSuccess('업로드가 완료되었습니다.')
+            setTimeout(()=>{
+                setSuccess(null)
+            },2000)
+            setFile(null)
+            setProduct({
+                title : '',
+                price : '',
+                option : '',
+                category : '',
+                colors : [],
+            })
+        if(fireRef.current){
+            fireRef.current.value = ''
+        }
         }catch(error){
             console.error(error)
+            setError('업로드에 실패했습니다')
+        } finally{
+            setIsLoading(false)
+            // finally : try나 catch와 관계없이 try랑 catch 이후에 무조건적으로 실행되는 블록
         }
     }
 
@@ -155,9 +179,12 @@ export default function UploadPage(){
                 {/* 업로드 버튼 */}
                 <button
                 className="resultBtn"
+                disabled={isLoading}
                 >
-                업로드
+                {isLoading ? '업로드중입니다..' : '제품 등록하기'}
                 </button>
+                {success && (<p>{success}</p>)}
+                {error && (<p>{error}</p>)}
             </form>
         </UploadContainer>
     )

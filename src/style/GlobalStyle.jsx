@@ -1,3 +1,4 @@
+
 import { createGlobalStyle } from "styled-components";
 
 
@@ -61,6 +62,6 @@ button{
 }
 
 body,html{
-	background: #000;
+	background: #fff;
 }
 `

@@ -7,7 +7,7 @@ import { GlobalStyle } from "./GlobalStyle"
 
 
 export const Registry = ({children}) => {
-    const [sheet] = useState(()=> new ServerStyleSheet)
+    const [sheet] = useState(()=> new ServerStyleSheet())
     // 초기 상태에서 ServerStyleSheet라는 인스턴스 생성
 
     useServerInsertedHTML(()=>{
@@ -23,7 +23,7 @@ export const Registry = ({children}) => {
     }
 // 서버 사이드에서 실행되는 경우(StyleSheetManager)를 사용해서 스타일 시트를 적용
     return (
-        <StyleSheetManager>
+        <StyleSheetManager sheet={sheet.instance}>
             <GlobalStyle/>
             {children}
         </StyleSheetManager>

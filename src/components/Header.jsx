@@ -3,6 +3,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import LoginInfo from "./Logininfo";
+import MainMenu from "./MainMenu";
 
 
 export default function Header(){
@@ -12,6 +13,7 @@ export default function Header(){
             <h1 className="logo">
                 <Link href='/'>Shop</Link>
             </h1>
+            <MainMenu/>
             <LoginInfo/>
         </HeaderContainer>
     )
