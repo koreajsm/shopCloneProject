@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import NoProduct from "./NoProduct"
+import CategorySlider from "@/components/CategorySlider"
 
 
 export default function CategoryPage(){
@@ -16,6 +17,7 @@ export default function CategoryPage(){
     console.log(slug)
 
     const [products, setProducts] = useState([])
+    const [randomImages, setRandomImages] = useState([])
 
     useEffect(() => {
         getCategoryProduct(slug).then((product)=>{
@@ -28,6 +30,7 @@ export default function CategoryPage(){
 
     return (
         <Container>
+            <CategorySlider imgs={products.image}/>
             <h2>{slug}페이지</h2>
             {/* <CategoryProductList slug={slug} products={products}/> */}
             {products.length > 0 ? (

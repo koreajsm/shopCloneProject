@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
-import { getDatabase, set, ref as databaseRef, get, query, orderByChild, equalTo } from 'firebase/database'
+import { getDatabase, set, ref as databaseRef, get, query, orderByChild, equalTo, remove } from 'firebase/database'
 import { getDownloadURL, getStorage, ref as storageRef, uploadBytes } from "firebase/storage";
 import { adminUser } from "@/service/admin";
 import { v4 as uuid } from 'uuid';
@@ -160,6 +160,76 @@ export async function getCategoryProduct(category){
     } catch(error){
         console.error(error)
         return []
+    }
+}
+
+export async function getProductId(productId){
+    try{
+        const productRef = databaseRef(database, `products/${productId}`)
+        const snapshot = await get(productRef)
+        if(snapshot.exists()){
+            return snapshot.val()
+        }
+    } catch(error){
+        console.error(error)
+    }
+}
+
+export async function getCart(userId){
+    try{
+        const snapshot = await (get(databaseRef(database, `cart/${userId}`)))
+        if(snapshot.exists()){
+            const item = snapshot.val();
+            return Object.values(item)
+        }else{
+            return []
+        } 
+    }catch (error){
+        console.error(error)
+    }
+}
+
+export async function updateCart (userId, product){
+    if(!userId || !product || !product.id){
+        console.error(error)
+        return
+    }
+    try{
+        const cartRef = databaseRef(database , `cart/${userId}/${product.id}`)
+        await set(cartRef, product)
+    }catch(error){
+        console.error(error)
+    }
+}
+
+export async function removeCart (userId, productId){
+    console.log(userId)
+    return remove(databaseRef(database, `cart/${userId}/${productId}`))
+}
+
+export async function getSearchProducts(text){
+    try{
+        const dbRef = databaseRef(database, 'products')
+        const snapshot = await get(dbRef)
+        if(snapshot.exists()){
+            const data = snapshot.val()
+            const allProducts = Object.values(data)
+            // console.log(allProducts)
+
+            if(allProducts.length === 0){
+                return []
+            }
+            const matchproducts = allProducts.filter((product)=>{
+                const itemTitle = product.title
+                console.log(itemTitle)
+                return itemTitle.includes(text)
+            })
+            return matchproducts
+        }else{
+            return []
+        }
+    }catch(error){
+        console.error(error)
     }
 }
 

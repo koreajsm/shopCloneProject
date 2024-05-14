@@ -1,12 +1,26 @@
 import { formatCurrency } from "@/utils/formatCurrency"
 import Image from "next/image"
+import { useRouter } from "next/navigation" // router 관련 기능은 next/router에서 next/navigation으로 이동
 import styled from "styled-components"
 
 
 export default function ProductItem({product}){
     console.log(product)
+
+    const router = useRouter()
+    const detailNavigate = () =>{
+        router.push(`/product/detail/${product.id}`)
+        /*
+        nextjs에서 router 기능중에서 페이지 이동 방법
+        push() //url이동/ 히스토리 저장 (뒤로가기 버튼시 이전 url로 이동 가능)
+        replace() //url이동/ 히스토리에 저장하지 않음 (뒤로가기 동작시 이전 url로 가지 않음)
+        go() //숫자만큼 뒤로 가거나 앞으로 가기가 가능
+        ex) .go(2) 2단계 앞으로 이동 .go(-2) 2단계 뒤로 이동
+        */
+    }
+
     return(
-        <DetailItem>
+        <DetailItem onClick={detailNavigate}>
             <Image src={product.image} width={'300'} height={'450'} layout="responsive" alt={product.title}/>
             <TextWrap>
                 <h3 className="itemTitle">{product.title}</h3>
