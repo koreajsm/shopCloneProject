@@ -41,8 +41,8 @@ export default function SearchPage(){
         <input type="text" value={text} onChange={handleSearchClick} className="searchForm"/>
         <ul className="productList">
             {result.map((product)=>(
-                <li>
-                    <ProductItem key={product.id} product={product}/>
+                <li key={product.id}>
+                    <ProductItem product={product}/>
                 </li>
             ))}
         </ul>
