@@ -25,7 +25,7 @@ export default function CartItem({product, index}){
     return (
         <li>
             <p>{index}</p>
-            <Image src={product.image} alt = {product.title} width={100} height={100}/>
+            <img src={product.image} alt = {product.title}/>
             <p className="cartItemTitle">상품명 : {product.title}</p>
             <p className="cartItemOpt">옵션 : {product.option}</p>
             <p className="cartItemPrice">가격 : {formatCurrency(product.price)}원</p>
