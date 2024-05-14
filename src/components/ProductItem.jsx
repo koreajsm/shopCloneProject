@@ -5,7 +5,6 @@ import styled from "styled-components"
 
 
 export default function ProductItem({product}){
-    console.log(product)
 
     const router = useRouter()
     const detailNavigate = () =>{
